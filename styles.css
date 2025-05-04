@@ -1,0 +1,13 @@
+#container {
+  display: flex;
+  flex-wrap: wrap;
+  height: 960px;
+  width: 960px;
+  border: 1px solid black;
+}
+
+.tile {
+  box-sizing: border-box;
+  flex: 1 0 auto;
+  border: 1px solid grey;
+}
