@@ -3,11 +3,13 @@
   flex-wrap: wrap;
   height: 960px;
   width: 960px;
+  background-color: black;
   border: 1px solid black;
 }
 
 .tile {
   box-sizing: border-box;
   flex: 1 0 auto;
+  background-color: white;
   border: 1px solid grey;
 }
