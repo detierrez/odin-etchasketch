@@ -1,12 +1,17 @@
+import currentColor from "./color.js";
+
 const btnReset = document.querySelector("#reset");
 const btnResize = document.querySelector("#resize");
+const btnRainbow = document.querySelector("#rainbow");
 const divContainer = document.querySelector("#container");
 const containerSize = divContainer.clientHeight;
 
 let gridSize = 32;
+let isRainbowOn = true;
 
 btnReset.addEventListener("click", generateGrid);
 btnResize.addEventListener("click", updateGrid);
+btnRainbow.addEventListener("click", toggleRainbow);
 
 generateGrid();
 
@@ -29,6 +34,17 @@ function generateGrid() {
   divContainer.replaceChildren(...tiles);
 }
 
-function paint(e) {
-  this.style.backgroundColor = "#000";
+function paint() {
+  if (isRainbowOn) {
+    this.style.backgroundColor = currentColor;
+    currentColor.update();
+  } else {
+    this.style.backgroundColor = "#000";
+  }
 }
+
+function toggleRainbow() {
+  isRainbowOn = !isRainbowOn;
+}
+
+
