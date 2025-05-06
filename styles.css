@@ -1,14 +1,108 @@
+html {
+  font-family: "Tiny5", sans-serif;
+  background-color: #405e54;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+nav {
+  color: white;
+  text-align: center;
+  font-size: 48px;
+  margin: 32px;
+}
+
+.body-container {
+  --size: 70vh;
+  width: round(var(--size), 1px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-container {
+  width: 100%;
+}
+
 #container {
+  box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
-  height: 960px;
-  width: 960px;
+  height: round(var(--size), 1px);
+  width: round(var(--size), 1px);
   background-color: black;
-  border: 1px solid black;
+  border: 10px solid #2b3044;
+  border-radius: 2%;
 }
 
 .tile {
   box-sizing: border-box;
   flex: 1 0 auto;
   border: 1px solid grey;
+  transition: 0.2s background-color;
+}
+
+.input-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.btn,
+input {
+  box-sizing: border-box;
+  height: 70px;
+  width: 140px;
+  font-family: inherit;
+}
+
+.btn {
+  background-color: #2b3044;
+  font-size: 24px;
+  font-weight: 700;
+  border: none;
+  border-radius: 9px;
+  /* box-shadow: 0px 1px 2px #2b3044, 0px 4px 16px #2b3044; */
+  outline: none;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.btn:active, .btn.active {
+  transition: 0.3s;
+  transform: scale(0.85);
+}
+
+.btn:after {
+  content: attr(data-label);
+  color: transparent;
+  background: text white;
+}
+
+.rainbow:hover:after {
+  background: text
+    linear-gradient(90deg, #866ee7, #ea60da, #ed8f57, #fbd41d, #2cca91, #866ee7);
+  background-size: 300% auto;
+  animation: slide-bg 2s linear infinite;
+}
+
+@keyframes slide-bg {
+  0% {
+    background-position: 0 50%;
+  }
+  100% {
+    background-position: 150% 50%;
+  }
+}
+
+input {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  border: 10px solid #2b3044;
+  border-radius: 9px;
 }
