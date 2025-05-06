@@ -1,32 +1,40 @@
-const btnClear = document.querySelector(".btn[data-label=Clear]");
 const btnClassic = document.querySelector(".btn[data-label=Classic]");
-const btnRainbow = document.querySelector(".btn[data-label=Rainbow]");
 const btnGradient = document.querySelector(".btn[data-label=Gradient]");
+const btnRainbow = document.querySelector(".btn[data-label=Rainbow]");
+const btnClear = document.querySelector(".btn[data-label=Clear]");
 const inputSize = document.querySelector("input");
 const divContainer = document.querySelector("#container");
 const containerSize = divContainer.clientHeight;
-const currentRainbowColor = [randInt(256), randInt(256), randInt(256)];
 
-let gridSize = 16;
+let gridSize;
 let isRainbowOn = false;
 let isGradientOn = false;
+let currentRainbowColor = [randInt(256), randInt(256), randInt(256)];
 
-btnClassic.addEventListener("click", activateClassic);
-btnGradient.addEventListener("click", toggleGradient);
-btnRainbow.addEventListener("click", toggleRainbow);
+btnClassic.addEventListener("click", activateClassicMode);
+btnGradient.addEventListener("click", toggleGradientMode);
+btnRainbow.addEventListener("click", toggleRainbowMode);
 btnClear.addEventListener("click", generateGrid);
-inputSize.addEventListener("keyup", updateGrid);
+inputSize.addEventListener("keyup", userSetGridSize);
 
+setGridSize(16);
 generateGrid();
 
-function updateGrid(event) {
+function userSetGridSize(event) {
   if (event.key === "Enter") {
-    gridSize = +inputSize.value;
-    gridSize = isNaN(gridSize) ? 0 : gridSize;
-    gridSize = bound(gridSize, 4, 100);
-    generateGrid();
     inputSize.value = "";
+    newSize = +inputSize.value;
+    if (!isNaN(newSize) && inputSize.value !== "") {
+      setGridSize(newSize);
+      generateGrid();
+    }
   }
+}
+
+function setGridSize(newSize) {
+  newSize = bound(newSize, 4, 100);
+  gridSize = newSize;
+  inputSize.placeholder = `${newSize}x${newSize}`;
 }
 
 function generateGrid() {
@@ -41,12 +49,12 @@ function generateGrid() {
     tiles.push(tile);
   }
   divContainer.replaceChildren(...tiles);
-
-  inputSize.placeholder = `${gridSize}x${gridSize}`;
 }
 
-function paint() {
-  let [r, g, b, a] = toColorArray(this.style.backgroundColor);
+function paint(event) {
+  const target = event.target;
+  let [r, g, b, a] = toColorArray(target.style.backgroundColor);
+  
   if (!isRainbowOn && !isGradientOn) {
     a = 0;
   }
@@ -55,35 +63,32 @@ function paint() {
     a *= 0.7;
   }
   if (isRainbowOn) {
-    tickRainbow();
+    // change the color to a slightly different one
+    currentRainbowColor = currentRainbowColor.map((ch) => {
+      ch += randInt(41) - 20;
+      return bound(ch, 0, 255);
+    });
     [r, g, b] = currentRainbowColor;
   }
 
-  this.style.backgroundColor = toColorString([r, g, b, a]);
+  target.style.backgroundColor = toColorString([r, g, b, a]);
 }
 
-// Change the current rainbow color to a slightly different one
-function tickRainbow() {
-  currentRainbowColor.forEach(
-    (value, i) => (currentRainbowColor[i] = deviate(value))
-  );
-}
-
-function activateClassic() {
+function activateClassicMode() {
   isGradientOn = false;
   isRainbowOn = false;
-  btnGradient.classList.remove('active');
-  btnRainbow.classList.remove('active');
+  btnGradient.classList.remove("active");
+  btnRainbow.classList.remove("active");
 }
 
-function toggleGradient() {
+function toggleGradientMode() {
   isGradientOn = !isGradientOn;
-  btnGradient.classList.toggle('active');
+  btnGradient.classList.toggle("active");
 }
 
-function toggleRainbow() {
+function toggleRainbowMode() {
   isRainbowOn = !isRainbowOn;
-  btnRainbow.classList.toggle('active');
+  btnRainbow.classList.toggle("active");
 }
 
 function toColorString([r, g, b, a = 1]) {
@@ -92,11 +97,6 @@ function toColorString([r, g, b, a = 1]) {
 
 function toColorArray(color) {
   return color.match(/\d+\.*\d*/g);
-}
-
-function deviate(colorValue) {
-  colorValue += randInt(41) - 20;
-  return bound(colorValue, 0, 255);
 }
 
 function bound(n, lowerLimit, upperLimit) {
