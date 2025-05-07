@@ -22,12 +22,12 @@ generateGrid();
 
 function userSetGridSize(event) {
   if (event.key === "Enter") {
-    inputSize.value = "";
     newSize = +inputSize.value;
     if (!isNaN(newSize) && inputSize.value !== "") {
       setGridSize(newSize);
       generateGrid();
     }
+    inputSize.value = "";
   }
 }
 
