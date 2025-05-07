@@ -3,7 +3,7 @@ const btnGradient = document.querySelector(".btn[data-label=Gradient]");
 const btnRainbow = document.querySelector(".btn[data-label=Rainbow]");
 const btnClear = document.querySelector(".btn[data-label=Clear]");
 const inputSize = document.querySelector("input");
-const divContainer = document.querySelector("#container");
+const divContainer = document.querySelector(".grid-container");
 const containerSize = divContainer.clientHeight;
 
 let gridSize;
@@ -45,7 +45,10 @@ function generateGrid() {
     tile.className = "tile";
     tile.style.backgroundColor = "rgba(255 255 255)";
     tile.style.width = `${tileSize}px`;
-    tile.addEventListener("mouseenter", paint);
+    tile.addEventListener("pointerdown", (e) => {
+      tile.releasePointerCapture(e.pointerId);
+    });
+    tile.addEventListener("pointerenter", paint);
     tiles.push(tile);
   }
   divContainer.replaceChildren(...tiles);
@@ -54,7 +57,7 @@ function generateGrid() {
 function paint(event) {
   const target = event.target;
   let [r, g, b, a] = toColorArray(target.style.backgroundColor);
-  
+
   if (!isRainbowOn && !isGradientOn) {
     a = 0;
   }
